@@ -1,0 +1,1 @@
+clones/n8004v/clone_info.mk

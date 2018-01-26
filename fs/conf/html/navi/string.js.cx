@@ -1,0 +1,477 @@
+<script>
+
+var TAB_CODE=9
+var DEL_CODE=46 
+var BS_CODE=8
+var SP_CODE=32
+var DOT_CODE=190
+var DOT2_CODE=110
+
+var IDX_ON=0
+var IDX_OFF=1
+
+var IDX_AP_MODE=0
+var IDX_CBRIDGE_MODE=1
+var IDX_WWAN_MODE=2
+var IDX_KAI_MODE=3
+var IDX_MBRIDGE_MODE=4
+
+
+var WIRELESS_AP_MODE=0;
+var WIRELESS_CBRIDGE_MODE=1;
+var WIRELESS_CWAN_MODE=2;
+var WIRELESS_KAI_MODE=3;
+var WIRELESS_MBRIDGE_MODE=4;
+
+var KAID_MODE_INIT=0  // ap mode
+var KAID_MODE_PSP=0 // psp kai
+var KAID_MODE_NORMAL=0 // xbox kai
+
+var AUTH_OPEN=1
+var AUTH_KEY=2
+var AUTH_AUTO=3
+var AUTH_WPA=4
+var AUTH_WPAPSK=5
+var AUTH_OPEN8021X=6
+var AUTH_WPANONE=7
+var AUTH_WPA2=8
+var AUTH_WPA2PSK=9
+var AUTH_WPAPSKWPA2PSK=10
+var AUTH_NOCHANGE=100
+
+var IDX_NOENC=0
+var IDX_WEP64=1
+var IDX_WEP128=2
+var IDX_TKIP=3
+var IDX_AES=4
+var IDX_TKIPAES=5
+
+var ENCRYPT_OFF=0
+var ENCRYPT_64=1
+var ENCRYPT_128=2
+var ENCRYPT_TKIP=3
+var ENCRYPT_AES=4
+var ENCRYPT_TKIPAES=5
+
+var KEY_STRING=0;
+var KEY_HEX=1;
+
+var IDX_KEY_STRING=0;
+var IDX_KEY_HEX=1;
+
+var REGION_USA=1;
+var REGION_JAPAN=2;
+
+var DMZTWINIP_MODE_DMZ=1;
+var DMZTWINIP_MODE_TWINIP=2;
+
+var QOS_SHARING_BOUNDED=2;
+var QOS_SHARING_BORROW=3;
+
+
+var MSG_RESTART_CONFIRM_DEFAULT="¨t²Î±N«ì´_¨ì­ì¼t¹w³]­È¡A¬O§_Ä~Äò¡H";
+var MSG_RESTART_CONFIRM_UPNP="ÅÜ§óUPnP³]©w¡A¨t²Î±N­«·s¶}¾÷¡A¬O§_Ä~Äò¡H"
+var MSG_RESTART_CONFIRM_REBOOT="¨t²Î±N­«·s¶}¾÷¡A¬O§_Ä~Äò¡H";
+var MSG_RESTART_CONFIRM_CHANGE_LANIP="ÅÜ§óLAN IP¦ì§}¨t²Î±N­«·s¶}¾÷¡A¬O§_Ä~Äò¡H"
+var MSG_RESTART_CONFIRM_CHANGE_LANIP_FAKE_TWINIP="ÅÜ§óLAN IP¦ì§}¨t²Î±N­«·s¶}¾÷¡A¬O§_Ä~Äò¡H"
+
+var MSG_RESTART_CONFIRM_RESTORE="«ì´_³]©w¡A¨t²Î±N­«·s¶}¾÷¡A¬O§_Ä~Äò¡H";
+var MSG_RESTART_CONFIRM_NAT="ÅÜ§óNAT³]©w¨t²Î±N­«·s¶}¾÷¡A¬O§_Ä~Äò¡H"
+var MSG_RESTART_CONFIRM_WIRELESS="ÅÜ§óµL½u¼Ò¦¡¨t²Î±N­«·s¶}¾÷¡A¬O§_Ä~Äò¡H";
+var MSG_KAID_MODE_CHANGE_WARNING="ÅÜ§óKAI¼Ò¦¡¨t²Î±N­«·s¶}¾÷¡A¬O§_Ä~Äò¡H";
+var MSG_RESTART_CONFIRM_WIRELESS_CBRIDGE="ÅÜ§óµL½u¼Ò¦¡¨t²Î±N­«·s¶}¾÷¡A¬O§_Ä~Äò¡H";
+var MSG_RESTART_CONFIRM_WIRELESS_WWAN="ÅÜ§óµL½u¼Ò¦¡¨t²Î±N­«·s¶}¾÷¡A¬O§_Ä~Äò¡H";
+// common
+var MODIFY_OP="­×§ï"
+var MSG_INVALID_HWADDR="MAC¦ì§}¿ù»~"
+var MSG_DELETE_RULE_CONFIRM="½T©w²¾°£¦¹³W«h¡H"
+var MSG_SELECT_RULE_TO_DEL="½Ð¿ï¾Ü­n§R°£ªº³W«h"
+var MSG_ALL_STOP_RULE="¬O§_°±¥Î©Ò¥H³W«h¡H"
+
+var MSG_OPENER_PAGE_MOVED="­¶­±¤w²¾°£"
+var MSG_INVALID_VALUE="Invalid value."
+
+
+
+// wireless_config_wizard
+var MSG_INVALID_WEP_KEY_HEXVALUE2="µL½uºô¸ô±K½XÀ³¸Ó¥Ñ¤Q¤»¶i¦ìªº¦r¦ê²Õ¦¨"
+var MSG_INVALID_WPAPSK_KEY_MISMATCH="µL½uºô¸ô±K½X¤£¦P"
+
+
+// sysconf_configmgmt
+var MSG_RESTOREFILE_BLANK="½Ð¿ï¾Ü³Æ¥÷ÀÉ"
+
+//natrouterconf
+var MSG_RULE_NAME_IS_BLANK="³W«h¦WºÙ¤£¥iªÅ¥Õ"
+
+
+// wirelessconf_wdssetup
+var MSG_WDS_DEL_WARNING="½T©w§R°£WDS¶Ü¡H"
+var MSG_APADD_REQUEST_APPLY="ÂI¿ï\"·s¼W\"«ö¶s±N§¹¦¨WDS³]©w¡C"
+
+// wirelessconf_basicsetup
+var MSG_BLANK_SSID="½Ð¿é¤JSSID"
+var MSG_INVALID_WEP_KEY_LENGTH="µL½uºô¸ô±K½Xªø«×¿ù»~"
+var MSG_INVALID_WEP_KEY_HEXVALUE="µL½uºô¸ô±K½XÀ³¸Ó¬°¤Q¤»¶i¦ì¦r¦ê"
+var MSG_INVALID_WPAPSK_KEY_LENGTH="µL½uºô¸ô±K½X³Ì¤Ö»Ý8­Ó­^¼Æ¦r"
+var MSG_INVALID_5_KEY_LENGTH="µL½uºô¸ô±K½X­n­è¦n5­Ó­^¼Æ¦r"
+var MSG_INVALID_13_KEY_LENGTH="µL½uºô¸ô±K½X»Ý­è¦n13­Ó­^¼Æ¦r"
+var SAVE_CONFIGURATION_STRING="¬O§_Àx¦s¥þ³¡³]©w¡H"
+
+var MSG_BLANK_REQUEST_SSID="½Ð¿é¤JSSID¡A¨ÃÂI¿ï\"½T©w\"¡C"   
+var MSG_INVALID_REQUEST_KEY="½Ð¿é¤JµL½uºô¸ô±K½X¡A¨ÃÂI¿ï\"½T©w\"¡C"
+var MSG_INVALID_REQUEST_APPLY="½Ð¿ï¾ÜAP¨ÃÂI¿ï\"½T©w\"¡C"
+var MSG_APPLY_REQUEST_KEY="¿ï¾Ü§¹ÀW¹D¡A½ÐÂI¿ï\"½T©w\"¡C"
+var MSG_BEST_CHANNEL_PRE="³Ì¦nªºÀW¹D¬O"
+var MSG_BEST_CHANNEL_POST="ÀW¹D"
+var MSG_KEY_LENGTH_DESC="±K½Xªø«×="
+
+// config_wizard
+var MSG_BLANK_ACCOUNT="½Ð¿é¤J¨Ï¥ÎªÌ¦WºÙ"
+var MSG_BLANK_PASSWORD="½Ð¿é¤J±K½X"
+
+var MSG_INVALID_IP="IP¦ì§}¿ù»~"
+var MSG_INVALID_NETMASK="¤lºô¸ô¾B¸n¿ù»~"
+var MSG_INVALID_GATEWAY="¹w³]¹h¹D¿ù»~"
+var MSG_INVALID_FDNS="¥D­nDNS¿ù»~"
+var MSG_INVALID_SDNS="¦¸­nDNS¿ù»~"
+
+
+//netconf_lansetup
+var NETCONF_INTERNAL_INVALID_NETWORK="°Ï°ìºô¸ô»PWAN¬Û¦Pºô¬q"
+var STATIC_LEASE_ALREADY_EXIST_IPADDRESS="¦¹IP§}§}¤w³Q·s¼W"
+var STATIC_LEASE_ALREADY_EXIST_HWADDRESS="¦¹MAC¦ì§}¤w³Q·s¼W"
+
+//netconf_wansetup
+var NETCONF_INTERNET_DHCP_MTU_INVALID="MTU¤£¯à¶W¹L1500"
+var NETCONF_INTERNET_PPP_MTU_INVALID="MTU¤£¯à¶W¹L1492"
+var NETCONF_INTERNET_KEEP_ALIVE_MSG="³Ì¤j¶¢¸m®É¶¡¿ù»~"
+var NETCONF_INTERNET_GW_INVALID_NETWORK="¹w³]¹h¹D»P°Ï°ìºô¸ô»Ý¦Pºô¬q"
+var NETCONF_WANSETUP_CONFIRM_WANINFO="¬O§_ÅÜ§óWAN¡H"
+
+
+//netconf_lansetup
+var NETCONF_INTERNAL_INVALID_DHCP_S_ADDR="DHCP°_©lIP¦ì§}¿ù»~"
+var NETCONF_INTERNAL_INVALID_DHCP_E_ADDR="DHCPµ²§ôIP¦ì§}¿ù»~"
+var NETCONF_INTERNAL_INVALID_DHCP_ADDR="DHCP¦ì§}½d³ò¿ù»~"
+var NETCONF_INTERNAL_DELETE_IP="¬O§_§R°£«O¯dªºIP¦ì§}¡H"
+
+// wirelessconf_advanced
+var DESC_INVALID_TX_POWER="µo®g¥\\²vÀ³¸Ó¬O1~100"
+var DESC_INVALID_RTS_THRESHOLD="RTS THRESHOLDÀ³¸Ó¬O1~2347"
+var DESC_INVALID_FRAG_THRESHOLD="FRAGMENT THRESHOLDÀ³¸Ó¬O256~2346"
+var DESC_INVALID_BEACON_INTERVAL="BEACON INTERVALÀ³¸Ó¬O50~1024"
+
+// expertconf_kai
+var KAID_MODE_CHANGE_WARNING="­«¶}·s¾÷¡A¬O§_Ä~Äò¡H"
+var KAID_MUST_SELECT_OBT_SERVER="½Ð¿ï¾Ü¦øªA¾¹"
+var KAID_RESTART_KAI_UI="½Ð¶}±ÒKAI­¶­±"
+
+//natrouterconf_portforward
+var MAX_PORT_FORWARD=60
+var NATCONF_PORTFORWARD_NO_MORE_RULE="³W«h¤W­­¤wº¡"
+var NATCONF_PORTFORWARD_INVALID_INT_IP_ADDRESS="IP¦ì§}¿ù»~"
+var NATCONF_PORTFORWARD_EXT_PORT_IS_BLANK="½Ð¿é¤J¥~³¡³q°T°ð"
+var NATCONF_PORTFORWARD_INVALID_EXT_PORT="¥~³¡³q°T°ð¿ù»~"
+var NATCONF_PORTFORWARD_INVALID_EXT_PORT_RANGE="¥~³¡³q°T°ð½d³ò¿ù»~"
+var NATCONF_PORTFORWARD_INVALID_INT_PORT="¤º³¡³q°T°ð¿ù»~"
+var NATCONF_PORTFORWARD_INVALID_INT_PORT_RANGE="¤º³¡³q°T°ð½d³ò¿ù»~"
+var NATCONF_PORTFORWARD_RUN_RULE="¨Ï¥Î¦¹³W«h¶Ü¡H"
+
+
+//natrouterconf_misc
+var NATCONF_INTAPPS_NO_MORE_ADD_FTP_PORT="FTP PORT¤wº¡"
+var NATCONF_INTAPPS_FTP_PORT_EMPTY="½Ð¶ñ¤J³q°T°ð¸¹½X"
+var NATCONF_INTAPPS_FTP_PORT_INVALID="³q°T°ð¸¹½X¿ù»~"
+
+//natrouterconf_router
+var NETCONF_ROUTE_ENTRY_DELETE="¬O§_§R°£¸ô¥Ñªí¡H"
+var NETCONF_ROUTE_ENTRY_SELECT="½Ð¿ï¾Ü­n§R°£ªº¸ô¥Ñªí"
+
+//natrouterconf_twinzipdmz
+var NATCONF_TWINIPDMZ_UPDATE_TIME="IP§ó·s¶g´Á¬°60¬í"
+var NATCONF_TWINIPDMZ_WARNING="¥Ø«e¹q¸£¨Ï¥ÎTWINIP¡A¦pªG¨ú®ø¡A¦¹¹q¸£ªºIP±N³Q­«·s³]©w¡A¬O§_Ä~Äò¡H"
+
+
+//firewallconf_firewall
+var USER_FWSCHED_TYPE=1
+var APP_FWSCHED_TYPE=2
+var URL_FWSCHED_TYPE=4
+var MAX_FWSCHED_COUNT=200 
+var FIREWALLCONF_FIREWALL_INVALID_TIME_TO_BLOCK="ªý¾×®É¶¡µL®Ä"
+var FIREWALLCONF_FIREWALL_DATE_WARNING="½Ð¿ï¾Ü¹LÂo¤é´Á¤Î®É¶¡"
+var FIREWALLCONF_FIREWALL_INVALID_SOURCE_IP="¨Ó·½IP¦ì§}¿ù»~"
+var FIREWALLCONF_FIREWALL_INVALID_SOURCE_HW="¨Ó·½MAC¦ì§}¿ù»~"
+var FIREWALLCONF_FIREWALL_INVALID_DEST_IP="¥Øªº¦aIP¦ì§}¿ù»~"
+var FIREWALLCONF_FIREWALL_INVALID_DEST_PORT="¥Øªº¦a³q°T°ð¿ù»~"
+var FIREWALLCONF_FIREWALL_RUN_RULE="¬O§_À³¥Î¦¹³W«h¡H"
+var FIREWALLCONF_FIREWALL_NO_MORE_RULE="³W«h¤wº¡"
+var FIREWALLCONF_FIREWALL_INVALID_PRIORITY="Àu¥ýÅv¿ù»~"
+
+//firewallconf_netdetect
+var NETCONF_NETDETECT_WARNING1="³Ì¤p³s½u¬O10"
+var NETCONF_NETDETECT_WARNING2="½d³ò0~23"
+
+
+//firewallconf_internet
+var FIREWALLCONF_INTERNET_RESTRICTIVE_WARNING="¥D¾÷¼Æ¶q³Ì¤j253"
+var FIREWALLCONF_INTERNET_RESTRICTIVE_CLEARANCE="¬O§_§R°£¥þ³¡¹q¸£¸ê°T³]©w¡H"
+
+//expertconf_ddns
+var EXPERTCONF_DDNS_HOSTNAME_IS_BLANK ="½Ð¿é¤J¥D¾÷¦WºÙ"
+var EXPERTCONF_DDNS_HOSTNAME_NOT_IPTIMEORG ="¥D¾÷¦WºÙ¶·¥Hiptime.orgµ²§À"
+var EXPERTCONF_IPTIMEDNS_NOMORE_WANRING1 ="¨S¦³§ó¦hªºIPTIME DDNS¥D¾÷"
+var EXPERTCONF_IPTIMEDDNS_INVALID_USERID="¥u¦³E-mail¦ì§}¦³¥Î"
+var EXPERTCONF_DYNDNS_NOMORE_WANRING1="?¦³§ó¦hªºDDNS¥DÉó"
+var INVALID_EMAIL_ADDRESS_STR="E-mail¦ì§}¿ù»~"
+var EXPERTCONF_IPTIMEDDNS_INVALID_HOSTNAME="¦ì§}¿ù»~"
+
+//expertconf_remotepc
+var EXPERTCONF_WOL_PC_NAME_IS_BLANK="½Ð¶ñ¤J¹q¸£¦WºÙ"
+var EXPERTCONF_WOL_DEL_PC="¬O§_§R°£¦¹¹q¸£¡H"
+var EXPERTCONF_WOL_WANT_TO_WAKE_UP_PC ="¬O§_³ê¿ô¦¹¹q¸£¡H"
+
+//expertconf_hostscan
+var ICMP_PING=0
+var ARP_PING=1
+var PING_SCAN=0
+var TCP_PORT_SCAN=1
+var SYSINFO_HOST_INVALID_TIMEOUT ="½Ð¿é¤J¹O®É®É¶¡"
+var SYSINFO_HOST_TIMERANGE   ="¹O®É®É¶¡»Ý¤j©ó¤@¬í"
+var SYSINFO_HOST_INVALID_DATASIZE ="½Ð¿é¤J¼Æ¾Ú¤j¤p"
+var SYSINFO_HOST_DATARANGE    ="¼Æ¾Ú¤j¤p½d³ò0~65000"
+var SYSINFO_HOST_INVALID_START  ="½Ð¿é¤J³q°T°ð"
+var SYSINFO_HOST_PORTRANGE      ="³q°T°ð½d³ò0~65535"
+
+//trafficconf_conninfo
+var TRAFFICCONF_CONNINFO_DELETE_CONN="¬O§_§R°£¦¹IP¦ì§}³s½u¸ê°T¡H"
+
+//trafficconf_switch
+var SELECT_VLAN_PORT_WARNING ="½Ð¿ï¾ÜVLAN PORT"
+var SELECT_VLAN_PORT_TRUNK_WARNING ="All port of TRUNK(%s) must be in VLAN."
+var SELECT_TRUNK_PORT_WARNING ="½Ð¿ï¾ÜVLAN PORT"
+var SELECT_TRUNK_PORT_VLAN_WARNING ="All port of TRUNK must be in VLAN(%s) or another VLAN."
+var MAX_MEMBER_TRUNK_WARNING="Maximum number of port is %d."
+var ALREADY_OTHER_GROUP_MEMBER="Ports can not be included in multiple groups."
+
+
+
+//trafficconf_loadshare
+var NATCONF_PORTFORWARD_NO_MORE_RULE="Âàµo³W«h¤wº¡"    
+var NATCONF_PORTFORWARD_RULE_NAME_IS_BLANK="½Ð¶ñ¤J³W«h¦WºÙ"
+var NATCONF_INTSERVER_INVALID_EXT_PORT="³q°T°ð¿ù»~"
+var NATCONF_LOADSHARE_KEEP_WRR="·í±Ò¥ÎWRR LS®É¡A¥i¸Ñ°£¦Û°Ê³Æ´©"
+var NATCONF_LOADSHARE_ON_LINE_BACKUP="¦Û°Ê³Æ´©±N±Ò¥Î¡A¬O§_Ä~Äò¡H"
+var NATCONF_LOADSHARE_DELETE_RULE="¬O§_§R°£¦¹³W«h¡H"
+var NATCONF_PORTFORWARD_SELECT_RULE_TO_DEL="½Ð¿ï¾Ü³W«h"
+//sysconf_syslog
+var SYSCONF_SYSLOG_WANRING ="®É¶¡¿ù»~"
+var SYSCONF_SYSLOG_EMAIL_CONFIRM="µo°eE-MAIL³ø§iµ¹ºÞ²zªÌ"
+var SYSCONF_SYSLOG_CLEAR_CONFIRM="¥þ³¡¨t²Î°O¿ýÀÉ±N³Q§R°£"
+
+//sysconf_login
+var SYSCONF_LOGIN_INVALID_NEW_PASS=    "·s±K½X¿ù»~"
+var SYSCONF_LOGIN_INVALID_NEW_ID  =    "¨Ï¥ÎªÌ¦WºÙ¿ù»~¡G½Ð¿é¤J­^¤å©Î¼Æ¦r"
+var SYSCONF_LOGIN_RELOGIN         =    "ÅÜ§ó¦¨¥\\«á½Ð¨Ï¥Î·s¨Ï¥ÎªÌ¦WºÙ»P±K½Xµn¤J"
+
+//expertconf_pptpvpn
+var EXPERTCONF_PPTPVPN_VPN_ACCOUNT_IS_BLANK="½Ð¶ñ¤JVPN±b¸¹"
+var EXPERTCONF_PPTPVPN_VPN_PASSWORD_IS_BLANK="½Ð¶ñ¤JVPN±K½X"
+var EXPERTCONF_PPTPVPN_IP_ADDRESS_IS_INVALID="½Ð¿é¤JIP¦ì§}"
+var EXPERTCONF_PPTPVPN_DO_YOU_WANT_DELETE="¬O§_§R°£±b¸¹¡H"
+
+//accesslist
+
+var ACCESSLIST_NOIPLISTMSG_1="µLªk³]©wIP¦ì§}¡A¬O§_¼W¥[IP¦ì§}³s½u¡H"
+var ACCESSLIST_NOIPLISTMSG_2=") ¤w³s½u?"
+var ACCESSLIST_WRONG_INPUT_IP="IP¦ì¿ù»~"
+var ACCESSLIST_WRITE_EXPLAIN="½Ð¶ñ¤J´y­z"
+var ACCESSLIST_DEL_WANT="¬O§_§R°£¦¹³]©w¡H"
+
+//reboot
+var REBOOT_CHANGEIP_RETRY_LOGIN="LAN IP¤wÅÜ§ó¡A½Ð­«·s³s½u¡H"
+var REBOOT_CHANGEIP_RETRY_NOLOGIN_WINDOWS="­«·s³s½u³]©w­¶­±"
+var SYSCONF_RESTORE_RETRY_CONNET="­«·s³s½u¦ÜÁÙ­ì­¶­±"
+
+//trafficconf_qos
+var QOS_BASIC_WARNING="¬O§_ÅÜ§óQOS³]©w¡H"
+var QOS_COMMON_EXCCED_MAX_CLASS="¶W¥X³Ì¤j¤ÀÃþ"
+var QOS_COMMON_EXCCED_MAX_SPEED="¶W¥X³Ì¤jÀW¼e½d³ò"
+var QOS_COMMON_ISOLATED_EXCEED="¿W¥ßÀW¼eÁ`©M¤£¥i¶W¹L³Ì¤jÀW¼e"  
+var QOS_COMMON_NO_CHANGE_DIRECTION="µLªkÅÜ§ó"
+var QOS_COMMON_ONLY_DIGIT="½Ð¿é¤J¼Æ¦r"
+var QOS_COMMON_BASIC_SETUP_FIRST="­º¥ýQoS°ò¥»³]©w"
+var QOS_PORT_PORTRANGE="³q°T°ð½d³ò1~65535"
+var QOS_PORT_INVALID_EXT_PORT_RANGE="¥~³¡³q°T°ð½d³ò¿ù»~"
+var QOS_BADNWIDTH_EMPTY="ÀW¼e"
+var QOS_RATE_RANGE="¡°ÏÂÝd/ÉÏ‚÷ÔO¶¨ÖµŸoÐ§¡±"
+
+
+// wirelessconf_multibssid
+var MSG_DEL_MBSSID_WARNING="µL½uºô¸ô±N¤¤Â_¡A¬O§_Ä~Äò¡H"
+
+
+//trafficconf_connctrl
+var MSG_CONNECTION_MAX_WARNING="Ä~Äò¡H"
+var MSG_CONNECTION_MAX_TOO_SMALL="³Ì¤j³s½u¼Æ¦Ü¤Ö512"
+var MSG_UDP_CONNECTION_MAX_TOO_BIG="³Ì¤jUDP³s½u¼Æ½d³ò10~³Ì¤j³s½u"
+var MSG_ICMP_CONNECTION_MAX_TOO_BIG="³Ì¤jICMP³s½u¼ÆÀ³¤p©ó³Ì¤j³s½u¼Æ"
+var MSG_INVALID_RATE_PER_MAX="³s½u³t²v¿ù»~"
+
+//sysconf_misc
+var MSG_WBM_POPUP="­«·s³s½u"
+
+
+var MSG_NO_DEL_ROUTING_TABLE="§R°£¸ô¥Ñªí!"
+var MSG_NO_DEL_WDS="§R°£WDS!"
+
+
+// trafficconf_switch
+var MSG_SAME_PORT_MIRROR="¬Û¦P³s±µ°ðµLªkºÊ±±"
+
+var MSG_HUBMODE_WARNING="ª`·N!!\n¨Ï¥Î¥æ´«¾¹¼Ò¦¡¡ANAT¸ô¥Ñ¥\¯à±N³Q°±¥Î¡A¬O§_Ä~Äò¡H"
+var MSG_HUBMODE_CONFIRM="ÂI¿ï½T©wÄ~Äò"
+
+// trafficconf_portqos
+var MSG_PORTQOS_BOTH_ZERO=": ¤£¥i³]©w0 Mbps."
+var MSG_PORTQOS_MAX_ERROR=":¤£¥i¶W¹L100 Mbps"
+var MSG_PORTQOS_INVALID_VALUE=": ¿ù»~­È(½d³ò "
+
+
+//firewallconf_etc
+var DESC_INVALID_ARP_PERIOD="ARP«Ê¥]/¬í½d³ò1 ~ 100."
+
+// wirelessconf_multibridge
+var MSG_DEL_WWAN_WANRING="¦³½uWANºÝ±N³Q°±¥Î¡A¬O§_Ä~Äò¡H"
+
+// iframe_pppoe_sched
+var MSG_INVALID_HOUR_VALUE="®É³]©w½d³ò0 ~ 23."
+var MSG_INVALID_MIN_VALUE="¤À³]©w½d³ò0 ~ 59."
+var MSG_PPPOE_SCHEDULE_SAME_RULE="¤w¦s¦b¬Û¦P³W«h"
+var QOS_BPI_RANGE="BPIªºIP¦ì§}½d³òµL®Ä (½d³ò¡G 2 ~ 31)"
+
+// qosconf
+var QOS_PROTOCOL_SELECT="½Ð¿ï¾Ü¨ó©w"
+
+
+// trafficconf_lspolicy
+var MSG_BACKUP_METHOD_AT_LEAST_ONE="½Ð¿ï¾Ü¤@­Ó­ì«h"
+var MSG_BACKUP_METHOD_DOMAIN="½Ð«ü©wºô°ì¦WºÙ"
+
+var MSG_INVALID_PROTONUM="Invalid Proto Num"
+
+var MSG_MBRIDGE_AUTO_CHANNEL_STRING="¨Ï¥Î¦Û°Ê³]©wÀW¹D¥\¯à¡A¨t²Î±N¦Û°Ê·j´M¦øªA¾¹ªºÀW¹D¡A·í¤¤Ä~APªºÀW¹DÅÜ§ó¡A¨t²Î±N¦Û°Ê½Õ¾ã¡A¬O§_Ä~Äò¡H"
+
+
+var TRAFFICCONF_ALL_OPTIONS_CLEAR =  "¬O§_²M°£©Ò¦³°T®§¡H"
+var MSG_SELECT_DEL_MBSS = "Select wireless network to remove."
+
+var AUTO_STRING = "¦Û°Ê"
+var MBRIDGE_AUTO_CHANNEL_SEARCH = "¦Û°Ê³]©wÀW¹D"
+
+var UPPER_CHANNEL_TXT = "Lower"
+var LOWER_CHANNEL_TXT = "Upper"
+
+var LAN_GATEWAY_WARNING_MSG = "·íWAN¨S¦³³s½u®É¦Û°Ê³s½u\n¬O§_Ä~Äò¡H";
+
+var MSG_IPPOOL_MAX_WARNING = "IP½d³ò±ø¥ó¤£¨¬"
+
+var MSG_MBSSID_QOS_WARNING="³Ì¤p­È¬°100 Kbps"
+
+
+var MSG_DFS_WARNING="³o¬ODFSÀW¹D"
+
+                     
+var SYSCONF_LOGIN_BLANK_ID =    "±b¸¹ªÅªº"
+var SYSCONF_LOGIN_BLANK_PASS  = "±K½XªÅªº"
+var SYSCONF_LOGIN_REMOVE_WARNING  = "°£±b¸¹/±K½X¡CÄ~Äò?  §R"
+var SYSCONF_LOGIN_INVALID_SESSION_TIMEOUT  = "³s½u¼Æ¶W®É1-60¤ÀÄÁ"
+var SYSCONF_LOGIN_CANT_REMOVE_ID  = "¨Ï¥Î³s½u¼Æ®ÉID©M±K½X¤£¯à³Q§R°£"
+var SYSCONF_LOGIN_SHOULD_HAVE_IDPASS  = " ±Ò¥Î³s½u¼Æ®É,¥²¶·³]©wID©M±K½X"
+var SYSCONF_LOGIN_RELOGIN_SESSION  = " ²¾°Ê¨ì°t¸m«áªºµn¿ý­¶­±¡CÄ~Äò?"
+var MSG_PPTPVPN_REBOOT = "·s§ó§ïPPTP VPN¦øªA¾¹°t¸m­«"
+var MSG_IGMP_REBOOT =  "­«±Ò¸ô¥Ñ¾¹«á¡AMOD³]©w¤~·|¥Í®Ä"
+var MSG_QOS_REBOOT="­«·s§ó§ïQos°t¸m"
+var UNALLOWED_ID_MSG  = "¤£³Q¤¹³\ªºID"
+var DESC_INVALID_DCS_PERIOD="½d³ò¦b1~100"
+var INVALID_HOUR_TEXT="½d³ò¦b0~23"
+var INVALID_MIN_TEXT="½d³ò¦b0~59"
+var SELECT_DAY_DESC="¤Ö¬Y¤Ñ©Î¨C¤Ñ½T»{¦Ü"
+var SNMP_INVALID_PORT= "³s±µ°ðÀ³¬°1 - 65535"
+var SNMP_COMMUNITY_ALERT= "±j¨îªºªÀ°Ï»â°ì"
+
+var MSG_INVALID_RADIUS_SERVER="RADIUS¦øªA¾¹¦ì§}µL®Ä"
+var MSG_INVALID_RADIUS_SECRET="RADIUS¦øªA¾¹±K½XµL®Ä"
+var MSG_INVALID_RADIUS_PORT="RADIUS¦øªA¾¹³q°T°ðµL®Ä"
+var MSG_WEP_WARNING="·í¥[±K¼Ò¦¡¬°WEP©ÎTKIP®É¡AÀW¼e³Ì¤j­È¬°54Mbps"
+var MSG_WEP_SEC_WARNING="¦]WEP¦w¥þ©Ê¸û§C¡A¤£«ØÄ³¨Ï¥Î"
+var MSG_WIRELESS_WAN_WARNING="¥»µL½uºô¸ôºÞ²z¤¶­±¤w³Q±Ò¥Î¡A½ÐÃö³¬¨ä¥LµL½uºô¸ôºÞ²z¤¶­±"
+var MSG_WDS_CHANNEL_WARNING="ÀW¹D¤£²Å"
+var MSG_NEW_BSS="·s¼WµL½uºô¸ô"
+var MSG_ADD_MAC_WARNING="µL»Ý·s¼WªºMAC¦ì§}"
+var MSG_REMOVE_MAC_WARNING="µL»Ý§R°£ªºMAC¦ì§}"
+var MSG_INVALID_AUTH_FOR_BRIDGE="µL½u¾ô±µ¥¢±Ñ"
+var MSG_TWINIP_CONFIRM_WARNING="Twin IP°t¸m«á,¨t²Î±N­«·s±Ò°Ê.  ¬O§_Ä~Äò?"
+
+
+var MSG_NEED_REBOOT_FOR_WWAN="¸ô¥Ñ¾¹±N­«·s±Ò°Ê¡A½Ð°Ý­nÄ~Äò¶Ü?"	
+
+var MSG_ENABLE_ONE_SERVICE_ID="³Ì¤Ö»Ý°t¸m¤@­Ó¨Ï¥ÎªÌ"
+var MSG_DUPLICATE_SERVICE_ID="¨Ï¥ÎªÌID­«ÂÐ¡A½Ð§ó§ïID" 
+
+
+
+var PASSWORD_NEEDED_TO_SET_THIS="¬°¤F¦w¥þ©Êªº¦Ò¶q¡A½Ð±z¥ý¥Ñ¨t²Î¤u¨ã-\nµn¤J±K½X·í¤¤ÅÜ§ó±zªº¨Ï¥ÎªÌµn¤J±b¸¹¤Î±K½X"
+
+
+var CANT_SET_DEFAULT_ID_PASS="³o¬O¥X¼t¹w³]ªº¨Ï¥ÎªÌ¦WºÙ¤Î±K½X\n½Ð§ó§ï±zªº¨Ï¥ÎªÌ¦WºÙ¤Î±K½X"
+var SYSCONF_LOGIN_NEED_CAPTCHA_CODE="½Ð¶ñ¼gÅçÃÒ½X"
+
+var MSG_SELECT_TORRENT_FOLDER_ERR="½Ð¿ï¾Ü¤U¸üªº¤å¥ó§¨"
+var MSG_SELECT_MEDIA_FOLDER_ERR="¿ï¾Ü´CÅé¤å¥ó§¨"
+var MSG_MEDIA_NAME_ERR="½Ð¶ñ¼g¦WºÙ"
+
+var MSG_HWADDR_NO_INPUT=MSG_INVALID_HWADDR
+var MSG_SELECT_MAC_REMOVED=NATCONF_PORTFORWARD_SELECT_RULE_TO_DEL
+
+var DDNS_HOSTNAME_RULE_TXT="¿ù»~ªºDDNS¨Ï¥ÎªÌ¦WºÙ"
+
+var SYSCONF_LOGIN_CANT_REMOVE_WARNING="½Ð¶ñ¼g¨Ï¥ÎªÌ¦WºÙ©M±K½X"
+
+
+
+var SYSCONF_ONLINE_UPGRADE_CONFIRM="All router's functions will be stopped during firmware upgrade.\nContinue?"
+
+var FIRMUP_DONE_TXT="Firmware upgrade is done.\nClick 'OK' button to continue."
+
+var MSG_INVALID_FOLDER_STR="Invalid Folder String.";
+var MSG_INVALID_FOLDER_NON_ASCII_STR="Only Ascii folder name is allowed.";
+var MSG_INVALID_FOLDER_2DOTS_STR=".. can't be used."
+var MSG_INVALID_FOLDER_DOT_STR=". can't be used at the start of folder name."
+var MSG_CANT_BE_USED="can't be used."
+
+var MSG_DYNAMIC_CHANNEL_WARNING="If static channel is used,  [Dynamic Channel Search] function will be disabled\nContinue?"
+
+
+var SYSCONF_INVALID_HOSTNAME="Invalid HostName"
+var UNPERMITTED_STR_PREFIX="Unpermitted characters:"
+var SYSCONF_INVALID_TEMPERATURE="Invalid Temperature.(Temperature <= 100)"
+
+
+
+// USE_SYSCONF_MISC2
+var SYSCONF_HOSTNAME_WARNING="The router name must be at least one letter."
+var SYSCONF_HOSTNAME_SPECIAL_WARNING="The router name can't be entered special characters and spaces."
+var SYSCONF_LED_START_TIME_ALERT="The start time can't be later than the end time."
+var SYSCONF_APPLY_BUTTON_NAME="Reboot"
+var SYSCONF_APPLY_ORIGINAL_VALUE="½T©w"
+var SYSCONF_FAN_ALERT="Temperature range setting is incorrect."
+
+var PLUGIN_INSTALL_BT_TXT="Install"
+var PLUGIN_UPDATE_BT_TXT="Update"
+var PLUGIN_CANCEL_BT_TXT="Cancel"
+var PLUGIN_REMOVE_BT_TXT="Remove"
+
+var MSG_TOO_LONG_SSID="SSID length is too long.\nNon ascii character have 3 bytes.\nCurrent Length of SSID Field: "
+
+</script>
